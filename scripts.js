@@ -15,7 +15,12 @@ const Player = (marker) => {
 };
 
 const displayController = (() => {
+    const renderBoard = () => {
+        document.querySelectorAll(".board").forEach((square, i) => {
+            square.textContent = gameBoard.array[i];
+        });
+    }
     return {
-
+        renderBoard
     };
-});
+})();

@@ -1,0 +1,10 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+}
+
+.board {
+    font-size: 3rem;
+    border: 1px solid black;
+}
