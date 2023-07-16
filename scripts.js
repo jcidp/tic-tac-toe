@@ -4,7 +4,7 @@ const GameBoard = (() => {
     return {
         board
     };
-})();
+});
 
 const Player = (chosenMarker, myName) => {
     let marker = chosenMarker;
@@ -21,7 +21,7 @@ const Player = (chosenMarker, myName) => {
 };
 
 const gameController = (() => {
-    let board = GameBoard.board;
+    let board = GameBoard().board;
     const player1 = Player("X", "Player 1");
     const player2 = Player("O", "Player 2");
     let currentPlayer = player1;
@@ -72,10 +72,12 @@ const gameController = (() => {
     };
 
     const resetGame = () => {
-        board = GameBoard.board;
+        board = GameBoard().board;
+        result = "";
     };
 
     const getResult = () => result;
+    const getBoard = () => board;
 
     return {
         playRound,
@@ -83,17 +85,18 @@ const gameController = (() => {
         switchPlayer,
         getResult,
         resetGame,
-        board
+        getBoard
     };
 })();
 
 const displayController = (() => {
     const boardSquares = document.querySelectorAll(".board");
     const text = document.getElementById("game-text");
+    const btn = document.getElementById("new-game");
 
     const showBoard = () => {
         boardSquares.forEach((square, i) => {
-            square.textContent = gameController.board[i];
+            square.textContent = gameController.getBoard()[i];
         });
         text.textContent = `It's ${gameController.getCurrentPlayer().getName()}'s turn...`;
     };
@@ -108,9 +111,16 @@ const displayController = (() => {
         text.textContent = gameController.getResult();
     };
 
+    const resetBoard = () => {
+        gameController.resetGame();
+        showBoard();
+    };
+
     boardSquares.forEach(square => {
         square.addEventListener("click", clickHandler);
     });
+
+    btn.addEventListener("click", resetBoard);
 
     showBoard();
 });
