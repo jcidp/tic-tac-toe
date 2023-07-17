@@ -11,19 +11,47 @@
     <header>
         <h1>Tic Tac Toe!</h1>
     </header>
-    <main>
+    <nav>
+        <div class="player-name-container">
+            <p class="player-name" id="player1">Player 1</p>
+            <input class="hidden" id="player1-name">
+        </div>
         <button id="new-game">New Game</button>
+        <div class="player-name-container">
+            <p class="player-name" id="player2">Player 2</p>
+            <input class="hidden" id="player2-name">
+        </div>
+    </nav>
+    <main>
         <h2 id="game-text"></h2>
         <div class="container">
-            <div class="board top left" data-index="0"></div>
-            <div class="board top middle" data-index="1"></div>
-            <div class="board top right" data-index="2"></div>
-            <div class="board center left" data-index="3"></div>
-            <div class="board center middle" data-index="4"></div>
-            <div class="board center right" data-index="5"></div>
-            <div class="board bottom left" data-index="6"></div>
-            <div class="board bottom middle" data-index="7"></div>
-            <div class="board bottom right" data-index="8"></div>
+            <div class="square-container top left" data-index="0">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container top middle" data-index="1">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container top right" data-index="2">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container center left" data-index="3">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container center middle" data-index="4">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container center right" data-index="5">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container bottom left" data-index="6">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container bottom middle" data-index="7">
+                <div class="board" ></div>
+            </div>
+            <div class="square-container bottom right" data-index="8">
+                <div class="board" ></div>
+            </div>
         </div>
     </main>
 </body>

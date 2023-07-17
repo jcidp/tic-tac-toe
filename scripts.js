@@ -90,12 +90,13 @@ const gameController = (() => {
 })();
 
 const displayController = (() => {
-    const boardSquares = document.querySelectorAll(".board");
+    const squareContainer = document.querySelectorAll(".square-container");
+    const boardSquare = document.querySelectorAll(".board");
     const text = document.getElementById("game-text");
     const btn = document.getElementById("new-game");
 
     const showBoard = () => {
-        boardSquares.forEach((square, i) => {
+        boardSquare.forEach((square, i) => {
             square.textContent = gameController.getBoard()[i];
         });
         text.textContent = `It's ${gameController.getCurrentPlayer().getName()}'s turn...`;
@@ -114,9 +115,10 @@ const displayController = (() => {
     const resetBoard = () => {
         gameController.resetGame();
         showBoard();
+        text.textContent = `It's ${gameController.getCurrentPlayer().getName()}'s turn...`;
     };
 
-    boardSquares.forEach(square => {
+    squareContainer.forEach(square => {
         square.addEventListener("click", clickHandler);
     });
 
