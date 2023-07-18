@@ -14,9 +14,12 @@ const Player = (chosenMarker, myName) => {
 
     const getName = () => name;
 
+    const setName = (newName) => name = newName;
+
     return {
         getMarker,
-        getName
+        getName,
+        setName
     };
 };
 
@@ -76,6 +79,8 @@ const gameController = (() => {
         result = "";
     };
 
+    const getPlayers = () => ({player1, player2});
+
     const getResult = () => result;
     const getBoard = () => board;
 
@@ -85,7 +90,8 @@ const gameController = (() => {
         switchPlayer,
         getResult,
         resetGame,
-        getBoard
+        getBoard,
+        getPlayers
     };
 })();
 
@@ -93,18 +99,25 @@ const displayController = (() => {
     const squareContainer = document.querySelectorAll(".square-container");
     const boardSquare = document.querySelectorAll(".board");
     const text = document.getElementById("game-text");
-    const btn = document.getElementById("new-game");
+    const newGameBtn = document.getElementById("new-game");
+    const nameEditBtn = document.querySelectorAll(".edit-name");
+    const nameInputs = document.querySelectorAll(".name-input");
+    const player1Text = document.getElementById(`player1`);
+    const player2Text = document.getElementById(`player2`);
 
-    const showBoard = () => {
+    const renderBoard = () => {
         boardSquare.forEach((square, i) => {
             square.textContent = gameController.getBoard()[i];
         });
-        text.textContent = `It's ${gameController.getCurrentPlayer().getName()}'s turn...`;
+        let playerName = gameController.getCurrentPlayer().getName();
+        text.textContent = `It's ${playerName}'${playerName.slice(playerName.length - 1) == "s" ? "" : "s"} turn...`;
+        player1Text.textContent = gameController.getPlayers().player1.getName();
+        player2Text.textContent = gameController.getPlayers().player2.getName();
     };
 
     const clickHandler = (e) => {
         gameController.playRound(e.target.dataset.index);
-        showBoard();
+        renderBoard();
         if (gameController.getResult() !== "") displayGameEnd();
     };
 
@@ -114,17 +127,50 @@ const displayController = (() => {
 
     const resetBoard = () => {
         gameController.resetGame();
-        showBoard();
-        text.textContent = `It's ${gameController.getCurrentPlayer().getName()}'s turn...`;
+        renderBoard();
+        let playerName = gameController.getCurrentPlayer().getName();
+        console.log(playerName.slice(playerName.length - 1) == "s");
+        text.textContent = `It's ${playerName}'${playerName.slice(playerName.length - 1) == "s" ? "s" : ""} turn...`;
+    };
+
+    const editName = (e) => {
+        let playerNum = e.target.dataset.player;
+        let playerText = document.getElementById(`player${playerNum}`);
+        let playerInput = document.getElementById(`player${playerNum}-input`);
+        playerInput.value = playerText.textContent;
+        toggleVisibility(document.querySelectorAll(`.player${playerNum}`));
+        playerInput.focus();
+    };
+
+    const confirmEdit = (e) => {
+        let playerNum = e.target.dataset.player;
+        let playerInput = document.getElementById(`player${playerNum}-input`);
+        toggleVisibility(document.querySelectorAll(`.player${playerNum}`));
+        if (!playerInput.value) return;
+        let opponentName = gameController.getPlayers()[`player${playerNum == 1 ? 2 : 1}`].getName();
+        if (playerInput.value === opponentName) return;
+        gameController.getPlayers()[`player${playerNum}`].setName(playerInput.value);
+        renderBoard();
+    };
+
+    const toggleVisibility = (elementList) => {
+        elementList.forEach(element => element.classList.toggle("hidden"));
+    };
+
+    const keyHandler = (e) => {
+        e.preventDefault();
+        if (e.key === "Enter" || e.key === "Escape") e.target.blur();
     };
 
     squareContainer.forEach(square => {
         square.addEventListener("click", clickHandler);
     });
+    newGameBtn.addEventListener("click", resetBoard);
+    nameEditBtn.forEach(editor => editor.addEventListener("click", editName));
+    nameInputs.forEach(input => input.addEventListener("focusout", confirmEdit));
+    nameInputs.forEach(input => input.addEventListener("keyup", keyHandler));
 
-    btn.addEventListener("click", resetBoard);
-
-    showBoard();
+    renderBoard();
 });
 
 displayController();
